@@ -33,3 +33,11 @@ class Cart:
             product = self.catalog.get(sku)
             total_price += product.price * qty
         return total_price
+
+    def total_with_discounts(self):
+        """Compute total with discount rules applied"""
+        from src.discount import DiscountEngine, BulkDiscountRule, OrderDiscountRule
+        engine = DiscountEngine()
+        engine.add_rule(BulkDiscountRule())
+        engine.add_rule(OrderDiscountRule())
+        return engine.apply(self)

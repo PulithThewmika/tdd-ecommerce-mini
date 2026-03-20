@@ -26,6 +26,7 @@ class BulkDiscountRule:
 
 class OrderDiscountRule:
     def apply(self, cart, current_total):
-        if current_total >= 1000:
+        if cart.total() >= 1000:
             return current_total * 0.95  # 5% off order
+        return current_total
         return current_total
