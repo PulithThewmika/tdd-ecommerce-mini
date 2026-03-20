@@ -14,6 +14,13 @@ class CheckoutService:
                 available = self.cart.inventory.getAvailable(sku)
                 if qty > available:
                     return {"status": "failure", "error": "Insufficient inventory"}
+            
+            # Actually reserve the items now that we know we have enough stock
+            if hasattr(self.cart.inventory, 'reserve'):
+                for sku, qty in self.cart.items.items():
+                    success = self.cart.inventory.reserve(sku, qty)
+                    if not success:
+                        return {"status": "failure", "error": f"Concurrency failure on {sku}"}
 
         # Compute total after discounts
         total = self.cart.total_with_discounts()
