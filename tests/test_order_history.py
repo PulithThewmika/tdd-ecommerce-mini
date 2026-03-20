@@ -1,6 +1,30 @@
 # tests/test_order_history.py
 
 import datetime
+from src.cart import Cart
+from src.checkout import CheckoutService
+from src.order import FakeOrderRepository
+
+class FakeProduct:
+    def __init__(self, sku, price):
+        self.sku = sku
+        self.price = price
+
+class FakeCatalog:
+    def __init__(self):
+        self.products = {"SKU1": FakeProduct("SKU1", 100)}
+    def get(self, sku):
+        return self.products.get(sku)
+
+class FakeInventory:
+    def getAvailable(self, sku):
+        return 100
+
+class FakePaymentGateway:
+    def __init__(self, success=True):
+        self.success = success
+    def charge(self, amount, token):
+        return self.success
 
 def test_checkout_creates_order():
     catalog = FakeCatalog()

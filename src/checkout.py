@@ -1,9 +1,11 @@
 # src/checkout.py
+from src.order import Order
 
 class CheckoutService:
-    def __init__(self, cart, payment_gateway):
+    def __init__(self, cart, payment_gateway, order_repo=None):
         self.cart = cart
         self.payment_gateway = payment_gateway
+        self.order_repo = order_repo
 
     def process(self, token):
         # Validate inventory
@@ -19,6 +21,9 @@ class CheckoutService:
         # Attempt payment
         success = self.payment_gateway.charge(total, token)
         if success:
+            if self.order_repo:
+                order = Order(self.cart.items, total)
+                self.order_repo.save(order)
             return {"status": "success", "charged_amount": total}
         else:
             return {"status": "failure", "error": "Payment failed"}
