@@ -69,7 +69,7 @@ To see detailed outputs and standard prints, run:
 python -m pytest -v
 ```
 
-## 🛡️ TDD Philosophy
+## TDD Philosophy
 Every feature in this repository was built using the following methodology:
 1. **RED**: Write a failing test expecting a specific capability or checking an edge case.
 2. **GREEN**: Write the minimal amount of code necessary to make the test pass.
